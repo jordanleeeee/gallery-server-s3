@@ -20,15 +20,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     logger.info("on request", {method: req.method, path: decodedUrl, ip: req.socket.remoteAddress})
 
     let path = decodedUrl.substring(5, decodedUrl.length);
-    const fromLocal = req.headers.host!.includes('localhost') || req.headers.host!.includes('127.0.0.1')
+    // const fromLocal = req.headers.host!.includes('localhost') || req.headers.host!.includes('127.0.0.1')
 
     try {
         let file = await getFile(path);
         res.writeHead(200, {'Content-Type': getContentType(path), 'Cache-Control': 'max-age=3600'});
-        if (!fromLocal && file.ContentLength! > 100_000) { // compress for non-local request and file > 1MB
-            res.end(await imagemin.buffer(file.Body! as Buffer, {plugins: [imageminMozjpeg({quality: 80})]}));
-        }
-        res.end(file.Body!)
+        // if (!fromLocal && file.ContentLength! > 100_000) { // compress for non-local request and file > 1MB
+        //     res.end(await imagemin.buffer(file.Body! as Buffer, {plugins: [imageminMozjpeg({quality: 80})]}));
+        // }
+        res.send(file.Body!)
+        res.end()
     } catch (e) {
         logger.error(`file not found: ${decodedUrl}`)
         res.status(404);
