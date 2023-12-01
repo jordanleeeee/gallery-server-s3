@@ -20,6 +20,13 @@ export async function getFile(filePath: string) {
     }).promise();
 }
 
+export function getFileStream(filePath: string) {
+    return s3.getObject({
+        Bucket: bucketName,
+        Key: filePath
+    }).createReadStream();
+}
+
 export function getContentType(filePath: string): string {
     const extension = path.extname(filePath);
     switch (extension) {

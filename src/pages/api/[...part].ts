@@ -1,7 +1,7 @@
 import type {NextApiRequest, NextApiResponse} from 'next'
 import imagemin from 'imagemin'
 import imageminMozjpeg from 'imagemin-mozjpeg'
-import {getFile} from "@/util/fileUtil";
+import {getFileStream} from "@/util/fileUtil";
 import {getContentType} from "@/util/fileUtil";
 import {decode} from "@/util/urlUtil";
 import {getLogger} from "@/util/logger";
@@ -23,13 +23,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // const fromLocal = req.headers.host!.includes('localhost') || req.headers.host!.includes('127.0.0.1')
 
     try {
-        let file = await getFile(path);
+        let fs = await getFileStream(path);
         res.writeHead(200, {'Content-Type': getContentType(path), 'Cache-Control': 'max-age=3600'});
         // if (!fromLocal && file.ContentLength! > 100_000) { // compress for non-local request and file > 1MB
         //     res.end(await imagemin.buffer(file.Body! as Buffer, {plugins: [imageminMozjpeg({quality: 80})]}));
         // }
-        res.send(file.Body!)
-        res.end()
+        fs.pipe(res)
     } catch (e) {
         logger.error(`file not found: ${decodedUrl}`)
         res.status(404);
