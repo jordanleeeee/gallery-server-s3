@@ -1,0 +1,32 @@
+.image-gallery-image {
+    height: 86vh;
+}
+
+.image-gallery-content.fullscreen .image-gallery-image {
+    height: 100vh;
+}
+
+.image-gallery-content.fullscreen {
+    padding-top: 2%;
+}
+
+.image-gallery-thumbnail {
+    width: auto !important;
+}
+
+.image-gallery-thumbnail-image {
+    height: 10vh;
+    width: auto !important;
+}
+
+.ReactGridGallery_tile {
+    width: min-content;
+}
+
+.ReactGridGallery_tile-description {
+    background: rgb(238, 238, 238) !important;
+}
+
+body {
+    overflow-y: scroll;
+}
